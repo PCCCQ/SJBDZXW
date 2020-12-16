@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>js</title></head>
+
+
+
+<body class="one" bgcolor="#64F0B6">
+<script type="text/javascript" language="javascript">
+var s="";
+var xianshi="";
+function fuzhi1()
+{ s=1;
+}
+function fuzhi2()
+{ s=2;
+}
+function XianShi()
+{ 
+ if(s==1){xianshi="120X 超远变焦 / 120W 秒充科技 / 120Hz刷新率 + 240Hz采样率 / 骁龙865旗舰处理器 / 双模5G / 10倍混合光学变焦 / OIS光学防抖+EIS数字防抖 / 2000万超清前置相机 / 双串蝶式石墨烯基锂离子电池 / 等效4500mAh大电量 / 120W 有线秒充+50W无线秒充+10W无线反充 / WiFi 6 / 多功能NFC / 红外遥控";}
+  if(s==2){xianshi="麒麟990 5G SoC芯片，纳米微晶陶瓷工艺，5000万超感知徕卡五摄，100倍双目变焦，华为5G全网通旗舰手机。";}
+  alert(xianshi);
+
+}
+</script>
+<div align="center" style="margin-top: 20%">
+<form method="post" action="#">
+<input type="radio" name="radxs" value="1" onclick="fuzhi1()"/>小米10至尊纪念版&nbsp;&nbsp;
+<input type="radio" name="radxs" value="2" onclick="fuzhi2()"/>华为p40 pro&nbsp;&nbsp;
+<input type="button" value="确定" onclick="XianShi()"/>
+</form>
+</div>
+  
+</body>
+</html>

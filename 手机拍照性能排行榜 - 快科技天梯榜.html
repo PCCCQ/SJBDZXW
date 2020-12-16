@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://rank.kkj.cn/photo.shtml -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>手机拍照性能排行榜 - 快科技天梯榜</title>
+<meta name="Keywords" content="手机拍照排行,手机拍照排行榜,手机拍照性能排行榜,排行榜,科技产品性能排行榜,快科技天梯榜">
+<meta name="description" content="快科技天梯榜为您提供专业科技产品性能榜单数据。">
+<link href="./手机拍照性能排行榜 - 快科技天梯榜_files/main_tt.css" rel="stylesheet" type="text/css">
+<link href="./手机拍照性能排行榜 - 快科技天梯榜_files/phb_plun.css" rel="stylesheet" type="text/css">
+<link href="./手机拍照性能排行榜 - 快科技天梯榜_files/fl_login.css" rel="stylesheet" type="text/css">
+<link href="./手机拍照性能排行榜 - 快科技天梯榜_files/fankui.css" rel="stylesheet" type="text/css">
+<script src="./手机拍照性能排行榜 - 快科技天梯榜_files/hm.js.下载"></script><script src="./手机拍照性能排行榜 - 快科技天梯榜_files/hm.js(1).下载"></script><script type="text/javascript" src="./手机拍照性能排行榜 - 快科技天梯榜_files/jquery-1.7.2.min.js.下载"></script><style type="text/css" abt="234"></style>
+<script src="./手机拍照性能排行榜 - 快科技天梯榜_files/trimpa.js.下载"></script>
+<script src="./手机拍照性能排行榜 - 快科技天梯榜_files/common.js.下载"></script>
+<script src="./手机拍照性能排行榜 - 快科技天梯榜_files/jquery.qrcode.min.js.下载"></script>
+<script type="text/javascript" src="./手机拍照性能排行榜 - 快科技天梯榜_files/jquery.artDialog.min.js.下载"></script>
+         <script type="text/javascript"> 
+             document.domain = "kkj.cn";
+             $(function () { 
+                 $(".thtimes").hover(function () {
+                     $(".times_float").show(); 
+                 },
+                function () {
+                    $(".times_float").hide(); 
+                });
+
+                 $(".grade").hover(function () {
+                     $(".mark_float").show(); 
+                 },
+                    function () {
+                        $(".mark_float").hide(); 
+                    }); 
+
+                 bindcompanyclick(getTelVideoList);
+                
+             });
+
+             var checktime = 0;
+             var checkoption = "";
+
+             function go(year, type, obj) {
+                 clearpk(bindcompanyclick(getTelVideoList));
+                 type == 1 ? (checkoption = $(obj).html(), $("#checkScore").val(year), $("#scorelist a").removeClass('cur')) : type == 2 ? (checktime = year, $("#checkTime").val(year), $("#timelist a").removeClass('cur')) : ""; 
+                 $(".times_float,.mark_float").hide();
+                 type == 1 ? $("#cscore a").html($(obj).html()):""; 
+                 $(obj).addClass('cur');
+                 getTelVideoList();
+             }
+
+             function isBA(v, obj) {
+                 clearpk(bindcompanyclick(getTelVideoList));
+                 checktime = 0;
+                 checkoption = "";
+                 $("#cscore a").html("综合成绩"); 
+                 $("#checkScore,#checkTime").val('0'); 
+                 $("#_t").val(v);
+                 $(".t_list li a").removeClass('houzhicur');
+                 $(".t_list li a").removeClass('qianzhicur');
+                 $(".t_list li").removeClass('cur');
+                 $(obj).parent().addClass('cur');
+                 v == 11 ? ($(obj).addClass('houzhicur'), $(".t_list li a").eq(1).addClass('qianzhi')) : ($(obj).addClass('qianzhicur'), $(".t_list li a").eq(0).addClass('houzhi'));
+                 getTelVideoList();
+             }
+
+             function getTelVideoList() {
+                 $("#pcTelPzList").html(null);
+                 var url = "api/tel/v1/data.ashx";
+                 $.ajax({
+                     type: "POST",
+                     url: url,
+                     data: {
+                         options: $("#checkScore").val(),
+                         times: $("#checkTime").val(),
+                         c: $("#checkCsid").val(),
+                         t: $("#_t").val(),
+                         ac: 'pz',
+                         pkids: pk_arr.join(',')
+                     },
+                     async: true,
+                     dataType: "json",
+                     beforeSend: function () { ShowTip("正在加载中..."); },
+                     success: function (data) {
+                         HideTip();
+                         if (data.dt.length == 0) {
+                             ShowTip("暂无"); return;
+                         }
+                     
+                         //time list
+                         var _mytimelist_ = TrimPath.processDOMTemplate("_mytimelist_", data);
+                         var myTimeObj = TrimPath.parseDOMTemplate("_mytimelist_");
+
+                         //scorelist
+                         var _myscorelist_ = TrimPath.processDOMTemplate("_myscorelist_", data);
+                         var myScoreObj = TrimPath.parseDOMTemplate("_myscorelist_");
+
+                         var tmdefault = "<a href=\"#\" onclick=\"go(0,2,this);return false;\" class=\"cur\">全部</a>";
+                         var opdefault = "<a href=\"#\" onclick=\"go(0,1,this);return false;\" class=\"cur\">综合成绩</a>";
+
+                         $("#timelist").html(tmdefault + myTimeObj.process(data));
+                         $("#scorelist").html(opdefault + myScoreObj.process(data));
+                          
+                         if (checktime > 0)
+                         {
+                             $("#timelist a").removeClass('cur');
+                             $("#timelist a").each(function () {
+                                 if ($(this).html() == checktime) {
+                                     $(this).addClass("cur");
+                                     return false;
+                                 }
+                             });
+                         }
+                         if (checkoption != "") {
+                             $("#scorelist a").removeClass('cur')
+                             $("#scorelist a").each(function () {
+                                 if ($(this).html() == checkoption) {
+                                     $(this).addClass("cur");
+                                     return false;
+                                 }
+                             });
+                         }
+
+                         //pz
+                         var _mypzlist_ = TrimPath.processDOMTemplate("_mytelpzlist_", data);
+                         var mypzObj = TrimPath.parseDOMTemplate("_mytelpzlist_");
+
+                         $("#pcTelPzList").html(mypzObj.process(data));
+                         pk_arr.length > 0 ? ($(".add2").show().find('a').addClass('cur'), clearcompanyclick()) : bindcompanyclick(getTelVideoList);
+                     },
+                     complete: function () { },
+                     error: function () { }
+                 })
+             } 
+
+             function pk_go(o) {
+                 if ($(o).html() == "开始对比") {
+                     if (pk_arr.length <= 1) {
+                         alert("请选中两个或以上的产品。");
+                         return;
+                     }
+                     $(o).attr("class", "recall").html('取消对比');
+                 }
+                 else {
+                     pk_arr = []; $("#tt_ratio_flaot").remove();
+                 }
+                 getTelVideoList();
+             }
+    </script>
+<!--<base target="_blank">--><base href="." target="_blank">
+<script charset="utf-8" src="chrome-extension://pngicgippofneelinabebobnkpmdiphn/js/btype.js"></script><script type="text/javascript" charset="utf-8" src="chrome-extension://pngicgippofneelinabebobnkpmdiphn/js/chrome.js"></script><script>//remove baidu search ad
+var _countAA = 0
+function doBBBd(){}
+doBBBd()
+document.addEventListener('keyup', function(){_countAA-=10;doBBBd()}, false)
+document.addEventListener('click', function(){_countAA-=10;doBBBd()}, false)
+
+</script></head>
+<body><div style="display: none; position: absolute;" class=""><div class="aui_outer"><table class="aui_border"><tbody><tr><td class="aui_nw"></td><td class="aui_n"></td><td class="aui_ne"></td></tr><tr><td class="aui_w"></td><td class="aui_c"><div class="aui_inner"><table class="aui_dialog"><tbody><tr><td colspan="2" class="aui_header"><div class="aui_titleBar"><div class="aui_title" style="cursor: move;"></div><a class="aui_close" href="javascript:/*artDialog*/;">×</a></div></td></tr><tr><td class="aui_icon" style="display: none;"><div class="aui_iconBg" style="background: none;"></div></td><td class="aui_main" style="width: auto; height: auto;"><div class="aui_content" style="padding: 20px 25px;"></div></td></tr><tr><td colspan="2" class="aui_footer"><div class="aui_buttons" style="display: none;"></div></td></tr></tbody></table></div></td><td class="aui_e"></td></tr><tr><td class="aui_sw"></td><td class="aui_s"></td><td class="aui_se" style="cursor: se-resize;"></td></tr></tbody></table></div></div>
+     <div class="top_1a">
+  <ul class="top_1_left">
+    <li><a title="门户版" href="https://www.mydrivers.com/" class="cur">门户版</a></li>
+    <li><a title="博客版" href="https://m.mydrivers.com/">博客版</a></li>
+  </ul>
+  <div class="top_1_right" style="position:relative;">
+    <ul>
+        <li><a target="_self" href="https://sso.mydrivers.com/login.html?returnurl=http://rank.kkj.cn/">登录</a></li>
+        <li id="i_reg"><a href="https://passport.mydrivers.com/reg.htm">注册</a></li>
+    </ul>
+  </div>
+</div>
+<div class="top_2">
+  <div class="top_2_left">
+   <a title="快科技" href="https://www.mydrivers.com/"><img alt="快科技(原驱动之家)" src="./手机拍照性能排行榜 - 快科技天梯榜_files/kkj_icon.png" width="150" height="48"></a>
+  </div>
+  <div class="top_2_center"> <a href="https://www.mydrivers.com/">首页</a> |<a href="https://news.mydrivers.com/">资讯</a> |<a href="https://drivers.mydrivers.com/">驱动</a> |<a href="https://hardware.mydrivers.com/">评测</a> | <a href="https://yjgg.mydrivers.com/">硬件狗狗</a> | <a href="http://www.drivergenius.com/">驱动精灵</a> |<a href="https://blog.mydrivers.com/tougao.htm" class="redcolor">投稿</a></div>
+  <div class="top_2_right">
+
+             <form action="https://rank.kkj.cn/photo.shtml#" target="_blank" onsubmit="return search()" name="myform" id="myform"> 
+        <div class="search_word_warp">
+             <input type="hidden" value="0" name="s_class" id="s_class">
+      <input type="text" autocomplete="off" onfocus="this.value=&#39;&#39;;" value="请输入关键字" name="q" id="q" class="search_word">
+    </div>
+          <div class="search_button_warp">
+            <input type="submit" name="button" id="button" value="搜索" class="search_button">
+          </div>
+        </form>
+       
+  </div>
+</div>
+<script language="javascript">
+    function search() {
+        var s_keywords = $("#q").val();
+        if ((s_keywords == "" || s_keywords == "请输入关键字")) {
+            alert("请输入查询关键字!");
+            $("#q").focus();
+            return false;
+        }
+        switch ($("#s_class").val()) {
+            case "0":
+                $("#myform").attr("action", "//so.mydrivers.com/news_utf8.aspx?q=" + escape(s_keywords));
+                break;
+            case "1":
+                $("#myform").attr("action", "//so.mydrivers.com/drivers_utf8.aspx?q=" + escape(s_keywords));
+                break;
+            default:
+                $("#myform").attr("action", "//so.mydrivers.com/news_utf8.aspx?q=" + escape(s_keywords));
+                break;
+        }
+
+        return true;
+    }
+</script>
+     <div class="title">  <div class="tleft">    <h4>排行榜</h4>    <span>专业产品性能数据对比 </span></div>  <div class="tright"> 截止<script>var date = new Date();               var time = date.getFullYear()+"年";               time += (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月';               time += date.getDate() + "日";               document.writeln(time);</script>2020年12月15日
+，榜单上榜产品共计 <span>1065</span> 款 </div> </div> 
+    <div class="nav_box">
+  <div class="nav">
+     <ul id="rankmenu">
+      <li>      
+      <a href="https://rank.kkj.cn/" title="首页" target="_self">首页<i></i></a>      
+      </li>
+      <li>      
+      <a href="https://rank.kkj.cn/dcpu.shtml" title="桌面CPU" target="_self">桌面CPU<i></i></a> 
+      </li>
+            <li>      
+      <a href="https://rank.kkj.cn/soc.shtml" title="手机CPU" target="_self">手机CPU<i></i></a> 
+      </li>
+             <li>      
+      <a href="https://rank.kkj.cn/mcpu.shtml" title="移动CPU" target="_self">移动CPU<i></i></a> 
+      </li>
+      <li>      
+      <a href="https://rank.kkj.cn/dgpu.shtml" title="桌面显卡" target="_self">桌面显卡<i></i></a> 
+      </li> 
+            <li>      
+      <a href="https://rank.kkj.cn/mgpu.shtml" title="移动显卡" target="_self">移动显卡<i></i></a> 
+      </li> 
+      <li>      
+      <a href="https://rank.kkj.cn/photo.shtml" title="手机拍照" target="_self" class="cur">手机拍照<i></i></a>      
+      </li>
+           <li>      
+      <a href="https://rank.kkj.cn/zoom.shtml" title="手机变焦" target="_self">手机变焦<i></i></a>     
+      </li>
+      <li>      
+      <a href="https://rank.kkj.cn/video.shtml" title="手机视频" target="_self">手机视频<i></i></a>
+      </li>
+     <li>      
+      <a href="https://rank.kkj.cn/dxo.shtml" title="手机影像DxO综合榜" target="_self">手机影像DxO综合榜<i></i></a>
+      </li>
+         <li>      
+      <a href="https://rank.kkj.cn/eve.shtml" title="电动汽车续航榜" target="_self">电动汽车续航榜<i></i></a>
+      </li> 
+       </ul>
+  </div>
+</div>
+
+<div class="pathway">数据更新时间：2020-12-04<span>数据来源：DxOMark网站</span>
+      <div class="pltag">
+  <ul>
+  <li><a class="cur" href="https://rank.kkj.cn/photo.shtml#" onclick="tabswitch(1,this,7);return false;">
+  <div class="plleft">&nbsp;</div>
+  <div class="plcenter">排行榜</div>
+  <div class="plright">&nbsp;</div></a>
+  </li>
+   <li><a href="https://rank.kkj.cn/photo.shtml#" onclick="tabswitch(2,this,7);return false;">
+   <div class="plleft">&nbsp;</div>
+   <div class="plcenter">评论</div>
+   <div class="plright">&nbsp;</div>
+  </a>  
+   </li>
+  </ul>
+  </div>
+</div>
+<div class="main_box">
+<h4>手机拍照性能排行榜
+
+<ul class="t_list" style="*right:140px;">
+<li class="cur"><a href="https://rank.kkj.cn/photo.shtml#" class="houzhi houzhicur" onclick="isBA(11,this);return false;">后置摄像头</a></li>
+<li class=""><a href="https://rank.kkj.cn/photo.shtml#" class="qianzhi" onclick="isBA(12,this);return false;">前置摄像头（自拍）</a></li>
+</ul>
+
+    <div class="grade"><span id="cscore"><a href="https://rank.kkj.cn/photo.shtml#" onclick="return false;">综合成绩</a></span>
+        <div class="mark_float" id="scorelist" style="display: none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="go(0,1,this);return false;" class="cur">综合成绩</a>   
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(101,1,this);return false;">曝光</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(102,1,this);return false;">色彩</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(103,1,this);return false;">自动对焦</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(104,1,this);return false;">纹理</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(105,1,this);return false;">噪点</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(106,1,this);return false;">伪像</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(107,1,this);return false;">夜景</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(108,1,this);return false;">散景</a>
+  
+              <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(109,1,this);return false;">预览</a>
+</div>
+</div>
+         <textarea id="_myscorelist_" style="display:none">                {for c in optionslist}  
+              &lt;a href="#" onclick="go(${c.iD},1,this);return false;"&gt;${c.name}&lt;/a&gt;
+               {/for} 
+          </textarea>  
+
+</h4>
+<div class="thdiv">
+ <ul>
+ <li class="thseniority">排行</li>
+  <li class="thprocessor">品牌</li>
+   <li class="thmodel">手机名称</li>
+    <li class="thtimes"><a href="https://rank.kkj.cn/photo.shtml#" onclick="return false;">发布时间</a>
+    <div class="times_float" id="timelist" style="display: none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="go(0,2,this);return false;" class="cur">全部</a>  
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2020,2,this);return false;">2020</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2019,2,this);return false;">2019</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2018,2,this);return false;">2018</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2017,2,this);return false;">2017</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2016,2,this);return false;">2016</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2015,2,this);return false;">2015</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2014,2,this);return false;">2014</a>
+ 
+                <a href="https://rank.kkj.cn/photo.shtml#" onclick="go(2013,2,this);return false;">2013</a>
+</div> 
+           <textarea id="_mytimelist_" style="display:none">                {for c in tlist} 
+		        &lt;a href="#" onclick="go(${c.time},2,this);return false;"&gt;${c.time}&lt;/a&gt;
+               {/for} 
+          </textarea>  
+    </li> 
+     <li class="thmark">
+      分数
+     </li> 
+ </ul> 
+ </div>
+<table width="100%" border="0" class="_tablelist_" id="pcTelPzList">   
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54131,this);return false;"></a></div>
+        <img src="./手机拍照性能排行榜 - 快科技天梯榜_files/no1.png">
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=KMOa
+">
+                   <ul>
+<li class="model1">华为Mate 40 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">140</li>
+</ul>
+   <div class="Progress" style="width:100%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6bd9f5" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(53805,this);return false;"></a></div>
+        <img src="./手机拍照性能排行榜 - 快科技天梯榜_files/no2.png">
+ 
+    </td>
+    <td class="processor" csid="2255"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193635901.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=0Yvr
+">
+                   <ul>
+<li class="model1">vivo X50 Pro+</li>
+<li class="times1">2020</li>
+<li class="mark1">139</li>
+</ul>
+   <div class="Progress" style="width:99.29%;background:#6bd9f5;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54535,this);return false;"></a></div>
+        <img src="./手机拍照性能排行榜 - 快科技天梯榜_files/no3.png">
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=nnJO">
+                   <ul>
+<li class="model1">苹果iPhone 12 Pro Max</li>
+<li class="times1">2020</li>
+<li class="mark1">138</li>
+</ul>
+   <div class="Progress" style="width:98.57%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50691,this);return false;"></a></div>
+            4
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=AZly">
+                   <ul>
+<li class="model1">华为P40 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">137</li>
+</ul>
+   <div class="Progress" style="width:97.86%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#8e8efc" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50874,this);return false;"></a></div>
+            5
+ 
+    </td>
+    <td class="processor" csid="2257"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191836152.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=baML
+">
+                   <ul>
+<li class="model1">荣耀30 Pro+</li>
+<li class="times1">2020</li>
+<li class="mark1">136</li>
+</ul>
+   <div class="Progress" style="width:97.14%;background:#8e8efc;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(53002,this);return false;"></a></div>
+            6
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=53G2
+">
+                   <ul>
+<li class="model1">小米10至尊纪念版</li>
+<li class="times1">2020</li>
+<li class="mark1">136</li>
+</ul>
+   <div class="Progress" style="width:97.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54533,this);return false;"></a></div>
+            7
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=JRjP
+">
+                   <ul>
+<li class="model1">iPhone 12 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">135</li>
+</ul>
+   <div class="Progress" style="width:96.43%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49820,this);return false;"></a></div>
+            8
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=pR3J
+">
+                   <ul>
+<li class="model1">华为Mate 30 Pro 5G</li>
+<li class="times1">2019</li>
+<li class="mark1">134</li>
+</ul>
+   <div class="Progress" style="width:95.71%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#8e8efc" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49551,this);return false;"></a></div>
+            9
+ 
+    </td>
+    <td class="processor" csid="2257"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191836152.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=9PZX
+">
+                   <ul>
+<li class="model1">荣耀V30 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">133</li>
+</ul>
+   <div class="Progress" style="width:95%;background:#8e8efc;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54751,this);return false;"></a></div>
+            10
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=rZe1
+">
+                   <ul>
+<li class="model1">iPhone 12</li>
+<li class="times1">2020</li>
+<li class="mark1">132</li>
+</ul>
+   <div class="Progress" style="width:94.29%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49455,this);return false;"></a></div>
+            11
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=7b5Y
+">
+                   <ul>
+<li class="model1">华为Mate 30 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">132</li>
+</ul>
+   <div class="Progress" style="width:94.29%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49861,this);return false;"></a></div>
+            12
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=d4BM
+">
+                   <ul>
+<li class="model1">iPhone 11 Pro Max</li>
+<li class="times1">2019</li>
+<li class="mark1">132</li>
+</ul>
+   <div class="Progress" style="width:94.29%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50227,this);return false;"></a></div>
+            13
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=aWRn
+">
+                   <ul>
+<li class="model1">小米10 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">130</li>
+</ul>
+   <div class="Progress" style="width:92.86%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49860,this);return false;"></a></div>
+            14
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=2EJj
+">
+                   <ul>
+<li class="model1">小米CC9 Pro尊享版</li>
+<li class="times1">2019</li>
+<li class="mark1">130</li>
+</ul>
+   <div class="Progress" style="width:92.86%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#47b27c" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50501,this);return false;"></a></div>
+            15
+ 
+    </td>
+    <td class="processor" csid="1417"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193551604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=Mq78
+">
+                   <ul>
+<li class="model1">OPPO Find X2 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">129</li>
+</ul>
+   <div class="Progress" style="width:92.14%;background:#47b27c;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54328,this);return false;"></a></div>
+            16
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=opZy
+">
+                   <ul>
+<li class="model1">Google Pixel 5</li>
+<li class="times1">2020</li>
+<li class="mark1">129</li>
+</ul>
+   <div class="Progress" style="width:92.14%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52791,this);return false;"></a></div>
+            17
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=KvZn
+">
+                   <ul>
+<li class="model1">Redmi K30 Pro变焦版</li>
+<li class="times1">2020</li>
+<li class="mark1">129</li>
+</ul>
+   <div class="Progress" style="width:92.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51380,this);return false;"></a></div>
+            18
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=3jJj
+">
+                   <ul>
+<li class="model1">iPhone 11</li>
+<li class="times1">2019</li>
+<li class="mark1">129</li>
+</ul>
+   <div class="Progress" style="width:92.14%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50923,this);return false;"></a></div>
+            19
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=6P5Y
+">
+                   <ul>
+<li class="model1">三星Galaxy S20 Ultra</li>
+<li class="times1">2020</li>
+<li class="mark1">128</li>
+</ul>
+   <div class="Progress" style="width:91.43%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51695,this);return false;"></a></div>
+            20
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=yWxY
+">
+                   <ul>
+<li class="model1">三星Galaxy S20+</li>
+<li class="times1">2020</li>
+<li class="mark1">127</li>
+</ul>
+   <div class="Progress" style="width:90.71%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52039,this);return false;"></a></div>
+            21
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=P8Rq
+">
+                   <ul>
+<li class="model1">一加8 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">126</li>
+</ul>
+   <div class="Progress" style="width:90%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49863,this);return false;"></a></div>
+            22
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=YRPW
+">
+                   <ul>
+<li class="model1">三星Galaxy Note 10+</li>
+<li class="times1">2019</li>
+<li class="mark1">126</li>
+</ul>
+   <div class="Progress" style="width:90%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49864,this);return false;"></a></div>
+            23
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=wplB
+">
+                   <ul>
+<li class="model1">华为P30 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">125</li>
+</ul>
+   <div class="Progress" style="width:89.29%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#47b27c" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49865,this);return false;"></a></div>
+            24
+ 
+    </td>
+    <td class="processor" csid="1417"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193551604.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">OPPO Reno 10倍变焦版</li>
+<li class="times1">2019</li>
+<li class="mark1">125</li>
+</ul>
+   <div class="Progress" style="width:89.29%;background:#47b27c;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49866,this);return false;"></a></div>
+            25
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=K6Pq
+">
+                   <ul>
+<li class="model1">三星Galaxy S10 5G</li>
+<li class="times1">2019</li>
+<li class="mark1">124</li>
+</ul>
+   <div class="Progress" style="width:88.57%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54744,this);return false;"></a></div>
+            26
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=3Pj6">
+                   <ul>
+<li class="model1">三星Galaxy Note 20（Exynos）</li>
+<li class="times1">2020</li>
+<li class="mark1">123</li>
+</ul>
+   <div class="Progress" style="width:87.86%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54430,this);return false;"></a></div>
+            27
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=zx3e">
+                   <ul>
+<li class="model1">Google Pixel 4a</li>
+<li class="times1">2020</li>
+<li class="mark1">122</li>
+</ul>
+   <div class="Progress" style="width:87.14%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(53791,this);return false;"></a></div>
+            28
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=GxpA">
+                   <ul>
+<li class="model1">三星Galaxy Note 20 Ultra</li>
+<li class="times1">2020</li>
+<li class="mark1">122</li>
+</ul>
+   <div class="Progress" style="width:87.14%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#5959c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(53901,this);return false;"></a></div>
+            29
+ 
+    </td>
+    <td class="processor" csid="139"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191736574.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=nE81
+">
+                   <ul>
+<li class="model1">华硕ZenFone 7 Pro</li>
+<li class="times1">2020</li>
+<li class="mark1">122</li>
+</ul>
+   <div class="Progress" style="width:87.14%;background:#5959c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49867,this);return false;"></a></div>
+            30
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=aD9W
+">
+                   <ul>
+<li class="model1">一加7 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">122</li>
+</ul>
+   <div class="Progress" style="width:87.14%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(50365,this);return false;"></a></div>
+            31
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=P9Pl
+">
+                   <ul>
+<li class="model1">一加7T Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">122</li>
+</ul>
+   <div class="Progress" style="width:87.14%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#8e8efc" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49868,this);return false;"></a></div>
+            32
+ 
+    </td>
+    <td class="processor" csid="2257"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191836152.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=yWRZ
+">
+                   <ul>
+<li class="model1">荣耀20 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">121</li>
+</ul>
+   <div class="Progress" style="width:86.43%;background:#8e8efc;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49869,this);return false;"></a></div>
+            33
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=5zJK
+">
+                   <ul>
+<li class="model1">三星Galaxy S10+</li>
+<li class="times1">2019</li>
+<li class="mark1">120</li>
+</ul>
+   <div class="Progress" style="width:85.71%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49870,this);return false;"></a></div>
+            34
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Pixel 4</li>
+<li class="times1">2019</li>
+<li class="mark1">120</li>
+</ul>
+   <div class="Progress" style="width:85.71%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49871,this);return false;"></a></div>
+            35
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=nWx8
+">
+                   <ul>
+<li class="model1">华为Mate 20 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">120</li>
+</ul>
+   <div class="Progress" style="width:85.71%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#2291e0" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51972,this);return false;"></a></div>
+            36
+ 
+    </td>
+    <td class="processor" csid="652"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/175347068.jpg"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=Wn6o
+">
+                   <ul>
+<li class="model1">摩托罗拉edge+</li>
+<li class="times1">2020</li>
+<li class="mark1">119</li>
+</ul>
+   <div class="Progress" style="width:85%;background:#2291e0;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49119,this);return false;"></a></div>
+            37
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=JqAa
+">
+                   <ul>
+<li class="model1">华为Mate 20 X (5G)</li>
+<li class="times1">2019</li>
+<li class="mark1">118</li>
+</ul>
+   <div class="Progress" style="width:84.29%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54745,this);return false;"></a></div>
+            38
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=qZx5">
+                   <ul>
+<li class="model1">一加Nord</li>
+<li class="times1">2020</li>
+<li class="mark1">117</li>
+</ul>
+   <div class="Progress" style="width:83.57%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54189,this);return false;"></a></div>
+            39
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=z1Qm">
+                   <ul>
+<li class="model1">华为P40手机</li>
+<li class="times1">2020</li>
+<li class="mark1">115</li>
+</ul>
+   <div class="Progress" style="width:82.14%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49872,this);return false;"></a></div>
+            40
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">小米9</li>
+<li class="times1">2019</li>
+<li class="mark1">115</li>
+</ul>
+   <div class="Progress" style="width:82.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49873,this);return false;"></a></div>
+            41
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=0RJd
+">
+                   <ul>
+<li class="model1">华为P20 Pro</li>
+<li class="times1">2018</li>
+<li class="mark1">114</li>
+</ul>
+   <div class="Progress" style="width:81.43%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49874,this);return false;"></a></div>
+            42
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone XS Max</li>
+<li class="times1">2018</li>
+<li class="mark1">110</li>
+</ul>
+   <div class="Progress" style="width:78.57%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51584,this);return false;"></a></div>
+            43
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=jR87
+">
+                   <ul>
+<li class="model1">三星Galaxy Z Flip</li>
+<li class="times1">2020</li>
+<li class="mark1">109</li>
+</ul>
+   <div class="Progress" style="width:77.86%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54191,this);return false;"></a></div>
+            44
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=13Gq
+">
+                   <ul>
+<li class="model1">iPhone SE 2020</li>
+<li class="times1">2020</li>
+<li class="mark1">108</li>
+</ul>
+   <div class="Progress" style="width:77.14%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54822,this);return false;"></a></div>
+            45
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/cc.ashx?go=83r9">
+                   <ul>
+<li class="model1">三星Galaxy Z Fold 2</li>
+<li class="times1">2020</li>
+<li class="mark1">108</li>
+</ul>
+   <div class="Progress" style="width:77.14%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49880,this);return false;"></a></div>
+            46
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=AP15
+">
+                   <ul>
+<li class="model1">Redmi K20 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">108</li>
+</ul>
+   <div class="Progress" style="width:77.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49878,this);return false;"></a></div>
+            47
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=LdBa
+">
+                   <ul>
+<li class="model1">小米MIX 3</li>
+<li class="times1">2018</li>
+<li class="mark1">108</li>
+</ul>
+   <div class="Progress" style="width:77.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#5959c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49875,this);return false;"></a></div>
+            48
+ 
+    </td>
+    <td class="processor" csid="139"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191736574.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">华硕ZenFone 6</li>
+<li class="times1">2019</li>
+<li class="mark1">107</li>
+</ul>
+   <div class="Progress" style="width:76.43%;background:#5959c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#e12726" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49890,this);return false;"></a></div>
+            49
+ 
+    </td>
+    <td class="processor" csid="564"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191951995.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=ZW95
+">
+                   <ul>
+<li class="model1">联想Z6 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">107</li>
+</ul>
+   <div class="Progress" style="width:76.43%;background:#e12726;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49877,this);return false;"></a></div>
+            50
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy Note 9</li>
+<li class="times1">2018</li>
+<li class="mark1">107</li>
+</ul>
+   <div class="Progress" style="width:76.43%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#47b27c" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54190,this);return false;"></a></div>
+            51
+ 
+    </td>
+    <td class="processor" csid="1417"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193551604.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=mrj1">
+                   <ul>
+<li class="model1">OPPO Find X2 Neo</li>
+<li class="times1">2020</li>
+<li class="mark1">106</li>
+</ul>
+   <div class="Progress" style="width:75.71%;background:#47b27c;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#db0000" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49876,this);return false;"></a></div>
+            52
+ 
+    </td>
+    <td class="processor" csid="1760"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191858370.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">HTC U12+</li>
+<li class="times1">2018</li>
+<li class="mark1">106</li>
+</ul>
+   <div class="Progress" style="width:75.71%;background:#db0000;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49886,this);return false;"></a></div>
+            53
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">小米8</li>
+<li class="times1">2018</li>
+<li class="mark1">105</li>
+</ul>
+   <div class="Progress" style="width:75%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49883,this);return false;"></a></div>
+            54
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy S9+</li>
+<li class="times1">2018</li>
+<li class="mark1">105</li>
+</ul>
+   <div class="Progress" style="width:75%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49885,this);return false;"></a></div>
+            55
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">LG G8 ThinQ</li>
+<li class="times1">2019</li>
+<li class="mark1">104</li>
+</ul>
+   <div class="Progress" style="width:74.29%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49882,this);return false;"></a></div>
+            56
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Pixel 3a</li>
+<li class="times1">2019</li>
+<li class="mark1">104</li>
+</ul>
+   <div class="Progress" style="width:74.29%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49881,this);return false;"></a></div>
+            57
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=W2PP
+">
+                   <ul>
+<li class="model1">iPhone XR</li>
+<li class="times1">2018</li>
+<li class="mark1">104</li>
+</ul>
+   <div class="Progress" style="width:74.29%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54192,this);return false;"></a></div>
+            58
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=QdEG
+">
+                   <ul>
+<li class="model1">LG V60 ThinQ 5G</li>
+<li class="times1">2020</li>
+<li class="mark1">103</li>
+</ul>
+   <div class="Progress" style="width:73.57%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52793,this);return false;"></a></div>
+            59
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=awZQ">
+                   <ul>
+<li class="model1">LG V60 ThinQ</li>
+<li class="times1">2020</li>
+<li class="mark1">103</li>
+</ul>
+   <div class="Progress" style="width:73.57%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49879,this);return false;"></a></div>
+            60
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Pixel 3</li>
+<li class="times1">2018</li>
+<li class="mark1">103</li>
+</ul>
+   <div class="Progress" style="width:73.57%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#7b7b7b" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49921,this);return false;"></a></div>
+            61
+ 
+    </td>
+    <td class="processor" csid="875"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194159151.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">索尼Xperia 5</li>
+<li class="times1">2019</li>
+<li class="mark1">101</li>
+</ul>
+   <div class="Progress" style="width:72.14%;background:#7b7b7b;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49887,this);return false;"></a></div>
+            62
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">一加6T</li>
+<li class="times1">2018</li>
+<li class="mark1">101</li>
+</ul>
+   <div class="Progress" style="width:72.14%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49888,this);return false;"></a></div>
+            63
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone X</li>
+<li class="times1">2017</li>
+<li class="mark1">101</li>
+</ul>
+   <div class="Progress" style="width:72.14%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#f75184" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49891,this);return false;"></a></div>
+            64
+ 
+    </td>
+    <td class="processor" csid="2220"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192231933.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">一加6</li>
+<li class="times1">2018</li>
+<li class="mark1">100</li>
+</ul>
+   <div class="Progress" style="width:71.43%;background:#f75184;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49884,this);return false;"></a></div>
+            65
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Pixel 2</li>
+<li class="times1">2017</li>
+<li class="mark1">100</li>
+</ul>
+   <div class="Progress" style="width:71.43%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff3636" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49889,this);return false;"></a></div>
+            66
+ 
+    </td>
+    <td class="processor" csid="1107"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193733604.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">华为Mate 10 Pro</li>
+<li class="times1">2017</li>
+<li class="mark1">100</li>
+</ul>
+   <div class="Progress" style="width:71.43%;background:#ff3636;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49895,this);return false;"></a></div>
+            67
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy Note 8</li>
+<li class="times1">2017</li>
+<li class="mark1">100</li>
+</ul>
+   <div class="Progress" style="width:71.43%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#FFC915" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49343,this);return false;"></a></div>
+            68
+ 
+    </td>
+    <td class="processor" csid="2281"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/202942035.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=eo9M
+">
+                   <ul>
+<li class="model1">realme X2 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">99</li>
+</ul>
+   <div class="Progress" style="width:70.71%;background:#FFC915;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49894,this);return false;"></a></div>
+            69
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">LG V40 ThinQ</li>
+<li class="times1">2018</li>
+<li class="mark1">98</li>
+</ul>
+   <div class="Progress" style="width:70%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#5959c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49892,this);return false;"></a></div>
+            70
+ 
+    </td>
+    <td class="processor" csid="139"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191736574.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=Gr0A
+">
+                   <ul>
+<li class="model1">华硕ROG Phone II</li>
+<li class="times1">2019</li>
+<li class="mark1">97</li>
+</ul>
+   <div class="Progress" style="width:69.29%;background:#5959c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#5959c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54193,this);return false;"></a></div>
+            71
+ 
+    </td>
+    <td class="processor" csid="139"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191736574.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=lo0e
+">
+                   <ul>
+<li class="model1">华硕ROG Phone 2</li>
+<li class="times1">2019</li>
+<li class="mark1">97</li>
+</ul>
+   <div class="Progress" style="width:69.29%;background:#5959c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49893,this);return false;"></a></div>
+            72
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone 8 Plus</li>
+<li class="times1">2017</li>
+<li class="mark1">96</li>
+</ul>
+   <div class="Progress" style="width:68.57%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49902,this);return false;"></a></div>
+            73
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">小米Note 3</li>
+<li class="times1">2017</li>
+<li class="mark1">94</li>
+</ul>
+   <div class="Progress" style="width:67.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#5959c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49898,this);return false;"></a></div>
+            74
+ 
+    </td>
+    <td class="processor" csid="139"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191736574.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">华硕ZenFone 5</li>
+<li class="times1">2018</li>
+<li class="mark1">93</li>
+</ul>
+   <div class="Progress" style="width:66.43%;background:#5959c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49905,this);return false;"></a></div>
+            75
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy A9</li>
+<li class="times1">2018</li>
+<li class="mark1">93</li>
+</ul>
+   <div class="Progress" style="width:66.43%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#2291e0" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51381,this);return false;"></a></div>
+            76
+ 
+    </td>
+    <td class="processor" csid="652"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/175347068.jpg"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">摩托罗拉One Zoom</li>
+<li class="times1">2019</li>
+<li class="mark1">92</li>
+</ul>
+   <div class="Progress" style="width:65.71%;background:#2291e0;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#e1e7eb" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54196,this);return false;"></a></div>
+            77
+ 
+    </td>
+    <td class="processor" csid="2379"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/232831641.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=EMYd
+">
+                   <ul>
+<li class="model1">Vsmart Live</li>
+<li class="times1">2019</li>
+<li class="mark1">92</li>
+</ul>
+   <div class="Progress" style="width:65.71%;background:#e1e7eb;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49897,this);return false;"></a></div>
+            78
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">小米Pocophone F1</li>
+<li class="times1">2018</li>
+<li class="mark1">92</li>
+</ul>
+   <div class="Progress" style="width:65.71%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6bd9f5" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49901,this);return false;"></a></div>
+            79
+ 
+    </td>
+    <td class="processor" csid="2255"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193635901.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">vivo X20 Plus</li>
+<li class="times1">2017</li>
+<li class="mark1">92</li>
+</ul>
+   <div class="Progress" style="width:65.71%;background:#6bd9f5;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#e1e7eb" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54195,this);return false;"></a></div>
+            80
+ 
+    </td>
+    <td class="processor" csid="2378"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/225817262.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=rX0K
+">
+                   <ul>
+<li class="model1">General Mobile GM 9 Pro</li>
+<li class="times1">2018</li>
+<li class="mark1">91</li>
+</ul>
+   <div class="Progress" style="width:65%;background:#e1e7eb;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49903,this);return false;"></a></div>
+            81
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy S7 Edge</li>
+<li class="times1">2016</li>
+<li class="mark1">91</li>
+</ul>
+   <div class="Progress" style="width:65%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6390de" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51379,this);return false;"></a></div>
+            82
+ 
+    </td>
+    <td class="processor" csid="697"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192131745.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">诺基亚7.2</li>
+<li class="times1">2019</li>
+<li class="mark1">90</li>
+</ul>
+   <div class="Progress" style="width:64.29%;background:#6390de;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#db0000" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49900,this);return false;"></a></div>
+            83
+ 
+    </td>
+    <td class="processor" csid="1760"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191858370.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">HTC U11</li>
+<li class="times1">2017</li>
+<li class="mark1">90</li>
+</ul>
+   <div class="Progress" style="width:64.29%;background:#db0000;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49909,this);return false;"></a></div>
+            84
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">LG V30</li>
+<li class="times1">2017</li>
+<li class="mark1">90</li>
+</ul>
+   <div class="Progress" style="width:64.29%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49904,this);return false;"></a></div>
+            85
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone 7 Plus</li>
+<li class="times1">2016</li>
+<li class="mark1">90</li>
+</ul>
+   <div class="Progress" style="width:64.29%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49899,this);return false;"></a></div>
+            86
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Pixel</li>
+<li class="times1">2016</li>
+<li class="mark1">90</li>
+</ul>
+   <div class="Progress" style="width:64.29%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51384,this);return false;"></a></div>
+            87
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy A71</li>
+<li class="times1">2020</li>
+<li class="mark1">89</li>
+</ul>
+   <div class="Progress" style="width:63.57%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#7b7b7b" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49896,this);return false;"></a></div>
+            88
+ 
+    </td>
+    <td class="processor" csid="875"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194159151.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">索尼Xperia 1</li>
+<li class="times1">2019</li>
+<li class="mark1">89</li>
+</ul>
+   <div class="Progress" style="width:63.57%;background:#7b7b7b;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6390de" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49907,this);return false;"></a></div>
+            89
+ 
+    </td>
+    <td class="processor" csid="697"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192131745.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">诺基亚9 PureView</li>
+<li class="times1">2019</li>
+<li class="mark1">88</li>
+</ul>
+   <div class="Progress" style="width:62.86%;background:#6390de;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51383,this);return false;"></a></div>
+            90
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Redmi Note 8 Pro</li>
+<li class="times1">2019</li>
+<li class="mark1">87</li>
+</ul>
+   <div class="Progress" style="width:62.14%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#b9466a" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49906,this);return false;"></a></div>
+            91
+ 
+    </td>
+    <td class="processor" csid="568"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192038761.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">LG G7 ThinQ</li>
+<li class="times1">2018</li>
+<li class="mark1">87</li>
+</ul>
+   <div class="Progress" style="width:62.14%;background:#b9466a;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#2291e0" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52003,this);return false;"></a></div>
+            92
+ 
+    </td>
+    <td class="processor" csid="652"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/175347068.jpg"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=88M6
+">
+                   <ul>
+<li class="model1">摩托罗拉Z2 Force</li>
+<li class="times1">2017</li>
+<li class="mark1">87</li>
+</ul>
+   <div class="Progress" style="width:62.14%;background:#2291e0;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#2291e0" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52004,this);return false;"></a></div>
+            93
+ 
+    </td>
+    <td class="processor" csid="652"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/175347068.jpg"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=v7Ov
+">
+                   <ul>
+<li class="model1">摩托罗拉G7 Plus</li>
+<li class="times1">2019</li>
+<li class="mark1">84</li>
+</ul>
+   <div class="Progress" style="width:60%;background:#2291e0;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#fd8635">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49908,this);return false;"></a></div>
+            94
+ 
+    </td>
+    <td class="processor" csid="2123"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/193652214.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=BXQr
+">
+                   <ul>
+<li class="model1">黑鲨游戏手机2</li>
+<li class="times1">2019</li>
+<li class="mark1">84</li>
+</ul>
+   <div class="Progress" style="width:60%;background:#fd8635;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#e1e7eb">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(54197,this);return false;"></a></div>
+            95
+ 
+    </td>
+    <td class="processor" csid="2380"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/234040944.png"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=z1rm
+">
+                   <ul>
+<li class="model1">Crosscall Trekker-X4</li>
+<li class="times1">2018</li>
+<li class="mark1">84</li>
+</ul>
+   <div class="Progress" style="width:60%;background:#e1e7eb;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51385,this);return false;"></a></div>
+            96
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy A50</li>
+<li class="times1">2019</li>
+<li class="mark1">81</li>
+</ul>
+   <div class="Progress" style="width:57.86%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49910,this);return false;"></a></div>
+            97
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy S6 Edge</li>
+<li class="times1">2015</li>
+<li class="mark1">81</li>
+</ul>
+   <div class="Progress" style="width:57.86%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#54bee9" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49913,this);return false;"></a></div>
+            98
+ 
+    </td>
+    <td class="processor" csid="1266"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192113433.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">魅族Pro 7 Plus</li>
+<li class="times1">2017</li>
+<li class="mark1">74</li>
+</ul>
+   <div class="Progress" style="width:52.86%;background:#54bee9;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6390de" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49916,this);return false;"></a></div>
+            99
+ 
+    </td>
+    <td class="processor" csid="697"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/192131745.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">诺基亚8</li>
+<li class="times1">2017</li>
+<li class="mark1">72</li>
+</ul>
+   <div class="Progress" style="width:51.43%;background:#6390de;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#2291e0" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(52005,this);return false;"></a></div>
+            100
+ 
+    </td>
+    <td class="processor" csid="652"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/175347068.jpg"></td>
+
+               <td colspan="3" class="merge" link="https://dt.mydrivers.com/tourl.ashx?go=4Eb1
+">
+                   <ul>
+<li class="model1">摩托罗拉G5S</li>
+<li class="times1">2017</li>
+<li class="mark1">70</li>
+</ul>
+   <div class="Progress" style="width:50%;background:#2291e0;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#6cabf4" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49912,this);return false;"></a></div>
+            101
+ 
+    </td>
+    <td class="processor" csid="1786"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/173153550.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">Google Nexus 6P</li>
+<li class="times1">2015</li>
+<li class="mark1">70</li>
+</ul>
+   <div class="Progress" style="width:50%;background:#6cabf4;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49911,this);return false;"></a></div>
+            102
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone 6</li>
+<li class="times1">2014</li>
+<li class="mark1">70</li>
+</ul>
+   <div class="Progress" style="width:50%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#ff7faf" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49915,this);return false;"></a></div>
+            103
+ 
+    </td>
+    <td class="processor" csid="116"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/191655762.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">iPhone 5s</li>
+<li class="times1">2013</li>
+<li class="mark1">69</li>
+</ul>
+   <div class="Progress" style="width:49.29%;background:#ff7faf;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(49914,this);return false;"></a></div>
+            104
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy S5</li>
+<li class="times1">2014</li>
+<li class="mark1">68</li>
+</ul>
+   <div class="Progress" style="width:48.57%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+  
+             <tr class="list_tr" bgdata="#4f71c6" style="box-shadow: none;">
+    <td class="seniority">
+        <div class="add2" style="display:none;"><a href="https://rank.kkj.cn/photo.shtml#" onclick="addpk(51382,this);return false;"></a></div>
+            105
+ 
+    </td>
+    <td class="processor" csid="829"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/194524589.png"></td>
+
+               <td colspan="3" class="merge" link="">
+                   <ul>
+<li class="model1">三星Galaxy J2 Pro (2018)</li>
+<li class="times1">2018</li>
+<li class="mark1">64</li>
+</ul>
+   <div class="Progress" style="width:45.71%;background:#4f71c6;"></div>
+               </td>    
+    </tr> 
+</table>
+    <textarea id="_mytelpzlist_" style="display:none">                {for c in dt}  
+             &lt;tr class="list_tr" bgdata="${c.color}"&gt;
+    &lt;td class="seniority"&gt;
+        &lt;div class="add2" style="display:none;"&gt;&lt;a href="#" onclick="addpk(${c.productID},this);return false;"&gt;&lt;/a&gt;&lt;/div&gt;
+          {if (c.ranking &gt; 3)}
+            ${c.ranking}
+         {else}
+        &lt;img src="//rank.kkj.cn/images/${c.rankinglogo}"&gt;
+          {/if} 
+    &lt;/td&gt;
+    &lt;td class="processor" csid="${c.CompanyID}"&gt;&lt;img src="${c.logo}"&gt;&lt;/td&gt;
+
+               &lt;td colspan="3" class="merge" link="${c.link}"&gt;
+                   &lt;ul&gt;
+&lt;li class="model1"&gt;${c.ProductName}&lt;/li&gt;
+&lt;li class="times1"&gt;${c.time}&lt;/li&gt;
+&lt;li class="mark1"&gt;${c.score}&lt;/li&gt;
+&lt;/ul&gt;
+   &lt;div class="Progress" style="width:${c.bfb}%;background:${c.color};"&gt;&lt;/div&gt;
+               &lt;/td&gt;    
+    &lt;/tr&gt; 
+               {/for} 
+</textarea> 
+  <div class="more" style="display:none;">没有更多数据了</div>
+      <div id="msg" style="text-align: center; color: red; display: none;">正在加载中...</div> 
+</div>
+    <input type="hidden" id="checkTime" value="0">
+    <input type="hidden" id="checkScore" value="0">
+    <input type="hidden" id="checkCsid" value="0">
+    <input type="hidden" id="_t" value="11">
+         <div class="footer_about">
+  <div class="pageFooter">
+    <div class="footerleft">
+      <dl>
+        <dd> 关于我们 </dd>
+        <dt> <a href="https://www.mydrivers.com/contact/Company.html">关于我们</a> </dt>
+        <dt> <a href="https://www.mydrivers.com/contact/privacy.html">隐私权说明 </a></dt>
+      </dl>
+      <dl>
+        <dd> 交流合作 </dd> 
+        <dt><a href="https://www.mydrivers.com/contact/jobs.html">加入我们</a> </dt>
+        <dt> <a id="a_fankui" href="javascript:;" target="_self">意见反馈</a> </dt>
+        <dt> <a href="https://www.mydrivers.com/contact/advertising.html">广告刊例</a> </dt>
+      </dl>
+      <dl>
+        <dd> 关注我们 </dd>
+        <dt id="mydrivers_wx" style="color:#888;position: relative;"> 微信公众号：<img src="./手机拍照性能排行榜 - 快科技天梯榜_files/erwm_small.png" width="25" height="25" alt="驱动之家微信公众号"> 
+          <!-- 悬浮二维码-->
+          <div id="mydrivers_wx_dia" class="wxewm_cur" style="none;">
+            <div class="float_ewm"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/kkj_wx.png" width="127" height="127"></div>
+            <div class="float_ewmar"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/ewmar.png" width="6" height="15"></div>
+          </div>
+        </dt>
+        <dt> 微博号：<a title="快科技官方微博" href="https://weibo.com/mydrivers">快科技2018</a></dt>
+        <dt> QQ群：53467377 </dt>
+      </dl>
+    </div>
+    <div class="footerright">
+      <ul>
+        <li> <span><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/kkj_android.png" width="110" height="110" alt="安卓客户端下载"></span>安卓客户端下载 </li>
+        <li> <span><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/kkj_ios2019.png" width="110" height="110" alt="IOS客户端下载"></span>IOS客户端下载 </li>
+      </ul>
+    </div>
+    <div class="footerForm clear1"> </div>
+  </div>
+</div>
+<div id="footer">
+  <p class="copyright">快科技（驱动之家）·1997-2020 版权所有</p>
+  <p class="copyright">Copyright(C)Mydrivers.com, All Rights Reserved.</p>
+  <p class="copyright"><a href="http://www.miibeian.gov.cn/">豫ICP备18024899号-1</a><a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=41010502003950" style="margin-left:20px;"><img src="./手机拍照性能排行榜 - 快科技天梯榜_files/batb.png">豫公网安备 41010502003950号</a> <br>
+    <br>
+  </p>
+</div>
+<div id="div_fankui" class="pinglun_login" style="width:514px; height:530px;"></div>
+<script type="text/javascript" src="./手机拍照性能排行榜 - 快科技天梯榜_files/commkkj2.js.下载"></script>
+<div style="display:none;">
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?5c29d864e2d966b37fcc3499441e9632";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?fa993fdd33f32c39cbb6e7d66096c422";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</div>
+          <!--侧边浮动条-->
+<div class="broadside" id="tt_sidebar">
+	<ul>	
+        <li><a href="https://rank.kkj.cn/photo.shtml#" onclick="pk();return false;">PK</a></li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" onclick="searchkey();return false;">搜</a></li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" id="collectionsite" onclick="return false;">藏</a></li>
+		<li>- 分享 -</li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" class="qq" id="share_qq" target="_blank"></a></li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" class="weibo" id="share_weibo"></a></li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" class="weixin" onclick="return false;"></a>
+            <div class="wx_ewm" style="display: none;"><canvas width="124" height="124"></canvas></div>
+		    <img class="wx_ewm_img" style="display: none;" src="./手机拍照性能排行榜 - 快科技天梯榜_files/ttright.png" width="17" height="33" alt="">
+		</li>
+		<li><a href="https://rank.kkj.cn/photo.shtml#" class="qqqzone" id="share_qqzone"></a></li>	
+	</ul>
+</div>
+
+
+</body></html>

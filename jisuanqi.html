@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>计算器</title>
+<script language="javascript">
+function compute(op)
+{var num1=0;
+ var num2=0;
+ num1=parseFloat(document.myform.num1.value);
+ num2=parseFloat(document.myform.num2.value);
+ if(op=='+')
+   document.myform.result.value=num1+num2;
+ if(op=='-')
+   document.myform.result.value=num1-num2;
+ if(op=='*')
+   document.myform.result.value=num1*num2;
+ if(op=='/' && num2!=0)
+   document.myform.result.value=num1/num2;
+	}
+</script>
+</head>
+
+<body>
+	<div align="center" style="background-color: aquamarine;width: 500px;margin-top: 20%;margin-left: 30%">
+		<h1 align="center">简单计算器</h1>
+<form action="" method="post" name="myform" id="myform">
+<p>
+第一个数：<input name="num1" type="text" id="num1" size="25">
+<br>
+<br>
+第二个数：<input name="num2" type="text" id="num2" size="25">
+</p>
+<p>
+<input name="addButton" type="button" id="addButton" value="+" onclick="compute('+')">
+<input name="subButton" type="button" id="asubButton" value="-" onclick="compute('-')">
+<input name="mulButton" type="button" id="mulButton" value="*" onclick="compute('*')">
+<input name="divButton" type="button" id="divButton" value="/" onclick="compute('/')">
+</p>
+<p>计算结果：
+<input name="result" type="text" id="result" size="25">
+</p>
+	</div>
+</body>
+</html>
